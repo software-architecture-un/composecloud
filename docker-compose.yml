@@ -1,0 +1,85 @@
+version: '3'
+#todos los microservicios
+services:
+  #microservicio de contactenos
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+    ports:
+      - "5434:5432"
+  web:
+    build: .
+    image: web
+    command: bundle exec rails s -p 3001 -b '0.0.0.0'
+    volumes:
+        - .:/user-ms
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+  #microservicio de lists
+  lists-ms:
+    container_name: lists-ms
+    image: dieosiris23/lists-ms
+    command: bash -c "python3 manage.py migrate && python3 manage.py makemigrations && python3 manage.py runserver 0.0.0.0:4004"
+    ports:
+      - "4004:4004"
+    depends_on:
+      - db
+  activities-ms:
+    container_name: activities-ms
+    image: dieosiris23/activity-ms
+    ports:
+      - "4000:4000"
+    depends_on:
+      - activities-db
+  #base de datos de contactenos
+  activities-db:
+    container_name: activities-db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: activities-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3307:3307"
+  #microservicio de calificaciones
+  scoreresources-ms:
+    container_name: scoreresources-ms
+    image: dieosiris23/scoreresources-ms
+    ports:
+      - "5000:5000"
+    depends_on:
+      - scoreresources-db
+  #base de datos de calificaciones
+  scoreresources-db:
+    container_name: scoreresources-db
+    image: mongo
+    ports:
+      - "27017:27017"
+  #api gateway para graphql
+  mafenix-api:
+    container_name: mafenix-api
+    image: dieosiris23/api_getway
+    environment:
+      PORT: '5500'
+      SHOW_URLS: 'true'
+      LISTS_URL: '192.168.99.101'
+      LISTS_PORT: '4004'
+      LISTS_ENTRY: 'lists-ms'
+      ACTIVITIES_URL: 'activities-ms'
+      ACTIVITIES_PORT: '4000'
+      ACTIVITIES_ENTRY: 'activities-ms/resources/activities'
+      SCORERESOURCES_URL: '192.168.99.101'
+      SCORERESOURCES_PORT: '5000'
+      SCORERESOURCES_ENTRY: 'scoreservice'
+      USERS_URL: '192.168.99.101'
+      USERS_PORT: '3000'
+      USERS_ENTRY: 'users'
+    ports:
+      - '5500:5500'
