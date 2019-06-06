@@ -11,12 +11,14 @@ services:
       POSTGRES_DB: db
     ports:
       - "5434:5432"
-  web:
-    build: .
-    image: web
-    command: bundle exec rails s -p 3001 -b '0.0.0.0'
     volumes:
-        - .:/user-ms
+      - /var/lib/postgresql/data
+  web:
+    container_name: web
+    image: dieosiris23/user-ms
+    command: bash -c "sleep 40 && rake db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
+    volumes:
+      - .:/user-ms
     ports:
       - "3001:3001"
     depends_on:
@@ -25,7 +27,7 @@ services:
   lists-ms:
     container_name: lists-ms
     image: dieosiris23/lists-ms
-    command: bash -c "python3 manage.py migrate && python3 manage.py makemigrations && python3 manage.py runserver 0.0.0.0:4004"
+    command: bash -c "sleep 40 && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:4004"
     ports:
       - "4004:4004"
     depends_on:
@@ -78,7 +80,7 @@ services:
       SCORERESOURCES_URL: '192.168.99.101'
       SCORERESOURCES_PORT: '5000'
       SCORERESOURCES_ENTRY: 'scoreservice'
-      USERS_URL: '192.168.99.101'
+      USERS_URL: 'web'
       USERS_PORT: '3000'
       USERS_ENTRY: 'users'
     ports:
