@@ -83,5 +83,7 @@ services:
       USERS_URL: 'web'
       USERS_PORT: '3001'
       USERS_ENTRY: 'users'
+      USERS_SIGNUP_ENTRY: 'signup'
+      USERS_LOGIN_ENTRY: 'login'
     ports:
       - '5500:5500'
