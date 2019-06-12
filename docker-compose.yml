@@ -16,7 +16,7 @@ services:
   web:
     container_name: web
     image: dieosiris23/user-ms
-    command: bash -c "sleep 40 && rake db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
+    command: bash -c "sleep 40 && rake db:drop db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
     volumes:
       - .:/user-ms
     ports:
@@ -93,5 +93,6 @@ services:
       USERS_ENTRY: 'users'
       USERS_SIGNUP_ENTRY: 'signup'
       USERS_LOGIN_ENTRY: 'login'
+      USERS_VERIFY_JWT: 'verify_token'
     ports:
       - '5500:5500'
