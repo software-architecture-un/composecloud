@@ -89,6 +89,16 @@ services:
       - ./data/db:/data/db
     ports:
       - "27017:27017"
+      
+  #SenderosUN-SOAP
+  senderos_un-soap:
+    container_name: senderos_un-soap
+    image: dieosiris23/senderos_un-soap
+    environment:
+      PORT: "3005"
+    command: bash -c "rails s -p 3005 -b '0.0.0.0'"
+
+  
   #api gateway para graphql
   mafenix-api:
     container_name: mafenix-api
