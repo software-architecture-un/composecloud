@@ -125,5 +125,5 @@ services:
     container_name: senderos_un-soap
     image: dieosiris23/senderos_un-soap
     command: bash -c "rails s -p 3005 -b '0.0.0.0'"
-    ports:
-      - "3005:3005"
+    environment:
+      PORT: '3005'
