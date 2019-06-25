@@ -71,16 +71,14 @@ services:
     image: mongo
     ports:
       - "27018:27018"
-
   trails-ms:
-    container_name: activities-ms
-    image: dieosiris23/activity-ms
+    container_name: trails-ms
+    image: dieosiris23/trails-ms
     environment:
       PORT: '3002'
     tty: true
     depends_on:
     - mongodb
-
   mongodb:
     image: mongo:latest
     container_name: "mongodb"
@@ -109,11 +107,12 @@ services:
       SCORERESOURCES_ENTRY: 'scoreservice'
       USERS_URL: 'web'
       USERS_PORT: '3001'
+      USERS_BY_EMAIL_ENTRY: 'users_by_email'
       USERS_ENTRY: 'users'
       USERS_SIGNUP_ENTRY: 'signup'
       USERS_LOGIN_ENTRY: 'login'
       USERS_VERIFY_JWT: 'verify_token'
-      TRAILS_URL: '192.168.99.101'
+      TRAILS_URL: 'trails-ms'
       TRAILS_PORT: '3002'
       TRAILS_ENTRY: 'trails-ms'
   senderos-proxy:
@@ -121,3 +120,9 @@ services:
     image: dieosiris23/senderos-proxy
     ports:
       - "80:80"
+  senderos_un-soap:
+    container_name: senderos_un-soap
+    image: dieosiris23/senderos_un-soap
+    command: bash -c "rails s -p 3005 -b '0.0.0.0'"
+    ports:
+      - "3005:3005"
