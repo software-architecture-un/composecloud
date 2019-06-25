@@ -17,7 +17,8 @@ services:
     container_name: web
     image: dieosiris23/user-ms
     command: bash -c "sleep 40 && rake db:drop db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
-    ports: "3001:3001"
+    ports: 
+      - "3001:3001"
     volumes:
       - .:/user-ms
     depends_on:
@@ -60,7 +61,8 @@ services:
   scoreresources-ms:
     container_name: scoreresources-ms
     image: dieosiris23/scoreresources-ms
-    ports: "5000:5000"
+    ports: 
+      - "5000:5000"
     depends_on:
       - scoreresources-db
   #base de datos de calificaciones
