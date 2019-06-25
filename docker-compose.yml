@@ -120,7 +120,6 @@ services:
     image: dieosiris23/senderos-proxy
     ports:
       - "80:80"
-      - "3005:3005"
   senderos_un-soap:
     container_name: senderos_un-soap
     image: dieosiris23/senderos_un-soap
