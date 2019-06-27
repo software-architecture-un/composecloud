@@ -89,6 +89,13 @@ services:
       - ./data/db:/data/db
     ports:
       - "27017:27017"
+  #Inteface SOAP
+  senderos_un-soap:
+    container_name: senderos_un-soap
+    image: dieosiris23/senderos_un-soap
+    command: bash -c "rails s -p 3005 -b '0.0.0.0'"
+    environment:
+      PORT: '3005'
   #api gateway para graphql
   mafenix-api:
     container_name: mafenix-api
@@ -115,14 +122,12 @@ services:
       TRAILS_URL: 'trails-ms'
       TRAILS_PORT: '3002'
       TRAILS_ENTRY: 'trails-ms'
+      INTERFACE_URL: 'senderos_un-soap'
+      INTERFACE_PORT: '3005'
+      INTERFACE_ENTRY: 'connect_gropu_c'
   senderos-proxy:
     container_name: senderos-proxy
     image: dieosiris23/senderos-proxy
     ports:
       - "80:80"
-  senderos_un-soap:
-    container_name: senderos_un-soap
-    image: dieosiris23/senderos_un-soap
-    command: bash -c "rails s -p 3005 -b '0.0.0.0'"
-    environment:
-      PORT: '3005'
+  
