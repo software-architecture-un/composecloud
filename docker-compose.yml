@@ -3,26 +3,20 @@ version: '3'
 services:
   #microservicio de contactenos
   db:
-    container_name: db
-    image: postgres
+    image: mysql:5.7
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: db
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: users-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 123
     ports:
-      - "5434:5432"
-    volumes:
-      - /var/lib/postgresql/data
+      - "3308:3308"
   web:
     container_name: web
     image: dieosiris23/user-ms
-    command: bash -c "sleep 40 && rake db:drop db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
-    ports: 
+    command: bash -c "sleep 10 && rake db:drop db:create db:migrate db:seed && bundle exec rails s -p 3001 -b '0.0.0.0'"
+    ports:
       - "3001:3001"
-    volumes:
-      - .:/user-ms
-    depends_on:
-      - db
   #microservicio de lists
   lists-db:
      image: postgres
